@@ -2,19 +2,7 @@
 
 class Json
 {
-	private static function process_defaults($options, $defaults)
-	{
-		$options_return = array();
-
-		foreach ($defaults as $name => $setting)
-		{
-			if (!isset($options[$name])) $options_return[$name] = $defaults[$name];
-			else $options_return[$name] = $setting;
-		}
-		return $options_return;
-	}
-
-	private static function process_encode_options($options)
+	private static function getEncodeOptionsMap()
 	{
 		$options_map = array(
 			'hex_tag' => JSON_HEX_TAG,
@@ -31,23 +19,15 @@ class Json
 
 		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
 		{
-			$options_map['bigint_as_string'] = JSON_BIGINT_AS_STRING;
 			$options_map['pretty_print'] = JSON_PRETTY_PRINT;
-			$options_map['unescaped_slashed'] = JSON_UNESCAPED_SLASHES;
+			$options_map['unescaped_slashes'] = JSON_UNESCAPED_SLASHES;
 			$options_map['unescaped_unicode'] = JSON_UNESCAPED_UNICODE;
 		}
 
-		$bitmask = 0;
-
-		foreach ($options as $name => $value)
-		{
-			if ($value) $bitmask |= $options_map[$name];
-		}
-
-		return $bitmask;
+		return $options_map;
 	}
 
-	public static function encode($data, $options = array())
+	private static function getEncodeDefaults()
 	{
 		$defaults = array(
 			'hex_tag' => false,
@@ -64,17 +44,32 @@ class Json
 
 		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
 		{
-			$defaults['bigint_as_string'] = false;
 			$defaults['pretty_print'] = false;
-			$defaults['unescaped_slashed'] = false;
+			$defaults['unescaped_slashes'] = false;
 			$defaults['unescaped_unicode'] = false;
 		}
 
-		$options = self::process_defaults($options, $defaults);
+		return $defaults;
+	}
 
-		$json_data = json_encode($data, self::process_encode_options($options));
+	/*
+	 * Returns the JSON representation of a value
+	 *
+	 * @param mixed $data 		The data being encoded. Can be any type except a resource. Only works with UTF-8 encoded data
+	 * @param array $options	Array of option flags
+	 *
+	 * @return string Returns a JSON encoded string on success
+	 *
+	 * @throws JsonException
+	 */
+	public static function encode($data, $options = array())
+	{
+		$options = JsonOptions::processDefaults($options, self::getEncodeDefaults());
+		$bitmask_options = JsonOptions::processOptions($options, self::getEncodeOptionsMap());
 
-		if ($json_data === false AND ($json_error = json_last_error()) != JSON_ERROR_NONE)
+		$json_data = @json_encode($data, $bitmask_options);
+
+		if ($json_data === false OR ($json_error = json_last_error()) != JSON_ERROR_NONE)
 		{
 			throw new JsonException($json_error, "Error encoding JSON:");
 		}
@@ -82,7 +77,7 @@ class Json
 		return $json_data;
 	}
 
-	private static function process_decode_options($options)
+	private static function getDecodeOptionsMap()
 	{
 		$options_map = array();
 
@@ -91,26 +86,46 @@ class Json
 			$options_map['bigint_as_string'] = JSON_BIGINT_AS_STRING;
 		}
 
-		$bitmask = 0;
-
-		foreach ($options as $name => $value)
-		{
-			if ($value) $bitmask |= $options_map[$name];
-		}
-
-		return $bitmask;
+		return $options_map;
 	}
 
-	public static function decode($data, $assoc = false, $depth = 512, $options = array())
+	private static function getDecodeDefaults()
 	{
+		$defaults = array();
+
 		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
 		{
 			$defaults['bigint_as_string'] = false;
 		}
 
-		$options = self::process_defaults($options, $defaults);
+		return $defaults;
+	}
 
-		$decoded_data = json_decode($data, $assoc, $depth, self::process_decode_options($options));
+	/*
+	 * Decodes a JSON string
+	 *
+	 * @param mixed $data 		The json string being decoded. Only works with UTF-8 encoded data
+	 * @param bool $assoc		When TRUE, returned objects will be converted into associative arrays
+	 * @param int $depth		User specified recursion depth
+	 * @param array $options	Array of option flags
+	 *
+	 * @return string Returns the contents of the JSON encoded string as the appropriate PHP type on success
+	 *
+	 * @throws JsonException
+	 */
+	public static function decode($data, $assoc = false, $depth = 512, $options = array())
+	{
+		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
+		{
+			$options = JsonOptions::processDefaults($options, self::getDecodeDefaults());
+			$bitmask_options = JsonOptions::processOptions($options, self::getDecodeOptionsMap());
+
+			$decoded_data = json_decode($data, $assoc, $depth, $bitmask_options);
+		}
+		else
+		{
+			$decoded_data = json_decode($data, $assoc, $depth);
+		}
 
 		if (is_null($decoded_data) AND ($json_error = json_last_error()) != JSON_ERROR_NONE)
 		{
@@ -120,29 +135,6 @@ class Json
 		return $decoded_data;
 	}
 
-}
-
-class JsonException extends \Exception
-{
-	public function __construct($error_code, $message = "", Exception $previous = null)
-	{
-		$error_messages = array(
-			JSON_ERROR_NONE => "No error has occurred",
-			JSON_ERROR_DEPTH => "The maximum stack depth has been exceeded",
-			JSON_ERROR_STATE_MISMATCH => "Invalid or malformed JSON",
-			JSON_ERROR_CTRL_CHAR => "Control character error, possibly incorrectly encoded",
-			JSON_ERROR_SYNTAX => "Syntax error",
-			JSON_ERROR_UTF8 => "Malformed UTF-8 characters, possibly incorrectly encoded"
-		);
-
-		if (array_key_exists($error_code, $error_messages)) $msg = $error_messages[$error_code];
-		else $msg = "Unknown Error";
-
-		if ($message) $message .= " ";
-		$message .= $msg;
-
-		parent::__construct($message, $error_code, $previous);
-	}
 }
 
 ?>

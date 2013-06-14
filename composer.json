@@ -20,7 +20,7 @@
 	},
 	"autoload": {
 		"psr-0": {
-			"Hampel/Json": "src/"
+			"Hampel\\Json": "src/"
 		}
 	},
 	"minimum-stability": "dev"
