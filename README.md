@@ -12,7 +12,7 @@ The recommended way of installing Hampel Json is through [Composer](http://getco
 
     {
         "require": {
-            "hampel/json": "dev-master"
+            "hampel/json": "1.0.*"
         }
     }
     
