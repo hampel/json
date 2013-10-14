@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.1 (2013-10-14)
+------------------
+
+* slight change to fix broken phpunit test
+
 1.0.0 (2013-08-28)
 ------------------
 

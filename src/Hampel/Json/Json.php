@@ -69,7 +69,9 @@ class Json
 
 		$json_data = @json_encode($data, $bitmask_options);
 
-		if ($json_data === false OR ($json_error = json_last_error()) != JSON_ERROR_NONE)
+		$json_error = json_last_error();
+
+		if ($json_data === false OR $json_error != JSON_ERROR_NONE)
 		{
 			throw new JsonException($json_error, "Error encoding JSON:");
 		}
@@ -127,7 +129,9 @@ class Json
 			$decoded_data = json_decode($data, $assoc, $depth);
 		}
 
-		if (is_null($decoded_data) AND ($json_error = json_last_error()) != JSON_ERROR_NONE)
+		$json_error = json_last_error();
+
+		if (is_null($decoded_data) AND $json_error != JSON_ERROR_NONE)
 		{
 			throw new JsonException($json_error, "Error decoding JSON:");
 		}
