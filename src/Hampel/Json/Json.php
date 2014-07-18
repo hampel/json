@@ -2,6 +2,9 @@
 
 class Json
 {
+	const DECODE_ASSOC = true;
+	const DECODE_OBJECT = false;
+
 	private static function getEncodeOptionsMap()
 	{
 		$options_map = array(
@@ -115,7 +118,7 @@ class Json
 	 *
 	 * @throws JsonException
 	 */
-	public static function decode($data, $assoc = false, $depth = 512, $options = array())
+	public static function decode($data, $assoc = self::JSON_DECODE_OBJECT, $depth = 512, $options = array())
 	{
 		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
 		{
