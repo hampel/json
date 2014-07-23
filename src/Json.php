@@ -2,105 +2,29 @@
 
 class Json
 {
-	private static function getEncodeOptionsMap()
-	{
-		$options_map = array(
-			'hex_tag' => JSON_HEX_TAG,
-			'hex_amp' => JSON_HEX_AMP,
-			'hex_apos' => JSON_HEX_APOS,
-			'hex_quot' => JSON_HEX_QUOT,
-			'force_object' => JSON_FORCE_OBJECT,
-		);
-
-		if (version_compare(PHP_VERSION, '5.3.3') >= 0)
-		{
-			$options_map['numeric_check'] = JSON_NUMERIC_CHECK;
-		}
-
-		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
-		{
-			$options_map['pretty_print'] = JSON_PRETTY_PRINT;
-			$options_map['unescaped_slashes'] = JSON_UNESCAPED_SLASHES;
-			$options_map['unescaped_unicode'] = JSON_UNESCAPED_UNICODE;
-		}
-
-		return $options_map;
-	}
-
-	private static function getEncodeDefaults()
-	{
-		$defaults = array(
-			'hex_tag' => false,
-			'hex_amp' => false,
-			'hex_apos' => false,
-			'hex_quot' => false,
-			'force_object' => false,
-		);
-
-		if (version_compare(PHP_VERSION, '5.3.3') >= 0)
-		{
-			$defaults['numeric_check'] = false;
-		}
-
-		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
-		{
-			$defaults['pretty_print'] = false;
-			$defaults['unescaped_slashes'] = false;
-			$defaults['unescaped_unicode'] = false;
-		}
-
-		return $defaults;
-	}
-
 	/*
 	 * Returns the JSON representation of a value
 	 *
-	 * @param mixed $data 		The data being encoded. Can be any type except a resource. Only works with UTF-8 encoded data
-	 * @param array $options	Array of option flags
+	 * @param mixed $data 	The data being encoded. Can be any type except a resource. Only works with UTF-8 encoded data
+	 * @param int $options	Bitmask of json_encode options
+	 * @param int $depth	Maximum depth
 	 *
 	 * @return string Returns a JSON encoded string on success
 	 *
 	 * @throws JsonException
 	 */
-	public static function encode($data, $options = array())
+	public function encode($data, $options = 0, $depth = 512)
 	{
-		$options = JsonOptions::processDefaults($options, self::getEncodeDefaults());
-		$bitmask_options = JsonOptions::processOptions($options, self::getEncodeOptionsMap());
-
-		$json_data = @json_encode($data, $bitmask_options);
+		$json_data = @json_encode($data, $options, $depth);
 
 		$json_error = json_last_error();
 
 		if ($json_data === false OR $json_error != JSON_ERROR_NONE)
 		{
-			throw new JsonException($json_error, "Error encoding JSON:");
+			throw new JsonException("Error encoding JSON:", $json_error);
 		}
 
 		return $json_data;
-	}
-
-	private static function getDecodeOptionsMap()
-	{
-		$options_map = array();
-
-		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
-		{
-			$options_map['bigint_as_string'] = JSON_BIGINT_AS_STRING;
-		}
-
-		return $options_map;
-	}
-
-	private static function getDecodeDefaults()
-	{
-		$defaults = array();
-
-		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
-		{
-			$defaults['bigint_as_string'] = false;
-		}
-
-		return $defaults;
 	}
 
 	/*
@@ -115,30 +39,30 @@ class Json
 	 *
 	 * @throws JsonException
 	 */
-	public static function decode($data, $assoc = false, $depth = 512, $options = array())
+	public function decode($data, $assoc = false, $depth = 512, $options = 0)
 	{
-		if (version_compare(PHP_VERSION, '5.4.0') >= 0)
-		{
-			$options = JsonOptions::processDefaults($options, self::getDecodeDefaults());
-			$bitmask_options = JsonOptions::processOptions($options, self::getDecodeOptionsMap());
-
-			$decoded_data = json_decode($data, $assoc, $depth, $bitmask_options);
-		}
-		else
-		{
-			$decoded_data = json_decode($data, $assoc, $depth);
-		}
+		$decoded_data = @json_decode($data, $assoc, $depth, $options);
 
 		$json_error = json_last_error();
 
-		if (is_null($decoded_data) AND $json_error != JSON_ERROR_NONE)
+		if (is_null($decoded_data) OR $json_error != JSON_ERROR_NONE)
 		{
-			throw new JsonException($json_error, "Error decoding JSON:");
+			throw new JsonException("Error decoding JSON:", $json_error);
 		}
 
 		return $decoded_data;
 	}
 
+	public static function __callStatic($method, $parameters)
+	{
+		$method_names = array('encode', 'decode');
+
+		if (in_array($method, $method_names))
+		{
+			$instance = new static();
+			call_user_func_array(array($instance, $method), $parameters);
+		}
+	}
 }
 
 ?>
