@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.0.0 (2014-07-24)
+------------------
+
+* major rewrite - vastly more simple, just a very basic wrapper now which throws exceptions for errors
+
 1.0.3 (2014-07-23)
 ------------------
 
