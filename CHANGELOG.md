@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+2.0.0 (2014-07-24)
+------------------
+
+* major rewrite - vastly more simple, just a very basic wrapper now which throws exceptions for errors
+
+1.0.3 (2014-07-23)
+------------------
+
+* converted to psr-4 autoloading
+* added phpunit back in to dev dependencies - can't assume other people will have phpunit installed for unit testing
+
 1.0.2 (2014-06-01)
 ------------------
 
