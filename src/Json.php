@@ -10,14 +10,15 @@ class Json
 	 *
 	 * @param mixed $data 	The data being encoded. Can be any type except a resource. Only works with UTF-8 encoded data
 	 * @param int $options	Bitmask of json_encode options
+     * @param int $depth    Maximum depth
 	 *
 	 * @return string Returns a JSON encoded string on success
 	 *
 	 * @throws JsonException
 	 */
-	public static function encode($data, $options = 0)
+    public static function encode($data, $options = 0, $depth = 512)
 	{
-		$json_data = @json_encode($data, $options);
+		$json_data = @json_encode($data, $options, $depth);
 
 		$json_error = json_last_error();
 
