@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+2.2.0 (2014-12-17)
+------------------
+
+* added $options parameter to decode, to support PHP 5.4.0 version of json_decode
+* changed JsonException to use new PHP 5.4 shortened array syntax
+* changed JsonTest unit tests to use new PHO 5.4 shortened array syntax
+* mininum PHP version set to 5.4.0 in composer.json
+
 2.1.1 (2014-12-17)
 ------------------
 
