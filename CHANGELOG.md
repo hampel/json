@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.1.1 (2014-12-17)
+------------------
+
+* removed unneeded docblock param $options for Json::decode
+
 2.1.0 (2014-12-17)
 ------------------
 
