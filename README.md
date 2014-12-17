@@ -16,7 +16,8 @@ The recommended way of installing Hampel Json is through [Composer](http://getco
         }
     }
 
-Note that v2.1 of this package supports PHP >= v5.3.3    
+Note that v2.1 of this package supports PHP >= v5.3.3 while v2.2 supports PHP >= v5.4.0 - the two versions will be
+maintained in parallel
     
 Usage
 -----
