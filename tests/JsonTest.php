@@ -4,14 +4,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 {
 	public function testEncode()
 	{
-		$data = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+		$data = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
 
 		$this->assertEquals(json_encode($data), Json::encode($data));
 	}
 
 	public function testEncodeWithOptions()
 	{
-		$data = array('<foo>',"'bar'",'"baz"','&blong&', "\xc3\xa9");
+		$data = ['<foo>',"'bar'",'"baz"','&blong&', "\xc3\xa9"];
 
 		$bitmask = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP;
 
@@ -20,7 +20,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
 	public function testEncodeWithObject()
 	{
-		$data = array(array(1,2,3));
+		$data = [[1,2,3]];
 
 		$bitmask = JSON_FORCE_OBJECT;
 
@@ -30,7 +30,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 	public function testEncodeBroken()
 	{
 		$this->setExpectedException('\Hampel\Json\JsonException', 'Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
-		$error = Json::encode(array(pack("H*" ,'c32e')));
+		$error = Json::encode([pack("H*" ,'c32e')]);
 	}
 
 	public function testDecode()
@@ -53,18 +53,18 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 		$this->setExpectedException('\Hampel\Json\JsonException', 'Error decoding JSON: The maximum stack depth has been exceeded');
 
 		$json = json_encode(
-			array(
-				1 => array(
-					'English' => array(
+			[
+				1 => [
+					'English' => [
 						'One',
 						'January'
-					),
-					'French' => array(
+					],
+					'French' => [
 						'Une',
 						'Janvier'
-					)
-				)
-			)
+					]
+				]
+			]
 		);
 
 		$error = Json::decode($json, true, 3); // static version
