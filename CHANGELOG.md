@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+2.3.0 (2014-12-17)
+------------------
+
+* added depth parameter to encode to allow usage of new PHP 5.5 parameter in json_encode
+* added new error codes JSON_ERROR_RECURSION, JSON_ERROR_INF_OR_NAN and JSON_ERROR_UNSUPPORTED_TYPE to JsonException
+* added new test for error while encoding NAN
+* mininum PHP version set to 5.5.0 in composer.json
+
 2.2.1 (2014-12-17)
 ------------------
 
