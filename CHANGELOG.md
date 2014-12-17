@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+2.2.1 (2014-12-17)
+------------------
+
+* Merge branch 'feature/decode-const' of https://bitbucket.org/_mbfisher/json into decode-const ... add constants for
+  DECODE_ASSOC and DECODE_OBJECT to make parameters more descriptive
+* added unit test using new class constant
+
 2.2.0 (2014-12-17)
 ------------------
 
