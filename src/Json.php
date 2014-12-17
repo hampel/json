@@ -2,6 +2,9 @@
 
 class Json
 {
+	const DECODE_ASSOC = true;
+	const DECODE_OBJECT = false;
+
 	/*
 	 * Returns the JSON representation of a value
 	 *
@@ -38,7 +41,7 @@ class Json
 	 *
 	 * @throws JsonException
 	 */
-	public static function decode($data, $assoc = false, $depth = 512, $options = 0)
+	public static function decode($data, $assoc = self::DECODE_OBJECT, $depth = 512, $options = 0)
 	{
 		$decoded_data = @json_decode($data, $assoc, $depth, $options);
 
