@@ -50,6 +50,12 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 		$error = Json::decode($bad_json);
 	}
 
+	public function testEncodeNaN()
+	{
+		$this->setExpectedException('\Hampel\Json\JsonException', 'Error encoding JSON: The value passed to json_encode() includes either NAN or INF');
+		$error = Json::encode(NAN);
+	}
+
 	public function testDecodeBrokenStackDepth()
 	{
 		$this->setExpectedException('\Hampel\Json\JsonException', 'Error decoding JSON: The maximum stack depth has been exceeded');
