@@ -15,6 +15,8 @@ The recommended way of installing Hampel Json is through [Composer](http://getco
             "hampel/json": "~2.0"
         }
     }
+
+Note that v2.1 of this package supports PHP >= v5.3.3    
     
 Usage
 -----
@@ -32,10 +34,6 @@ error codes into meaningful text for you automatically.
 	$data = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
 
     // Encode a variable as JSON:
-    $json = new Json();
-    echo $json->encode($data);
-
-    // make it easier with the static wrapper
     echo Json::encode($data);
 
 	// Encode options
