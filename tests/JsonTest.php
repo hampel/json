@@ -15,7 +15,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
 		$bitmask = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP;
 
-		$this->assertEquals(json_encode($data, $bitmask), Json::encode($data, $bitmask)); // static version
+		$this->assertEquals(json_encode($data, $bitmask), Json::encode($data, $bitmask));
 	}
 
 	public function testEncodeWithObject()
@@ -24,7 +24,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
 		$bitmask = JSON_FORCE_OBJECT;
 
-		$this->assertEquals(json_encode($data, $bitmask), Json::encode($data, $bitmask)); // static version
+		$this->assertEquals(json_encode($data, $bitmask), Json::encode($data, $bitmask));
 	}
 
 	public function testEncodeBroken()
@@ -36,9 +36,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 	public function testDecode()
 	{
 		$data = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-		$this->assertEquals(json_decode($data), Json::decode($data)); // static version
+		$this->assertEquals(json_decode($data), Json::decode($data));
 
-		$this->assertEquals(json_decode($data, true), Json::decode($data, true)); // static version
+		$this->assertEquals(json_decode($data, true), Json::decode($data, true));
 	}
 
 	public function testDecodeBrokenSyntaxError()
@@ -67,7 +67,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 			)
 		);
 
-		$error = Json::decode($json, true, 3); // static version
+		$error = Json::decode($json, true, 3);
 	}
 }
 
