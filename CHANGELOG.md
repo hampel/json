@@ -1,6 +1,15 @@
 CHANGELOG
 =========
 
+2.1.0 (2014-12-17)
+------------------
+
+* remove code not compatible with PHP 5.3
+* change methods to be static
+* split JsonException::$messages into static variable, removed things not supported by PHP 5.3
+* updated tests to use new static-only methods
+* there is one property which was introduced in PHP v5.3.3, so we'll use that as our minimum version in composer.json
+
 2.0.0 (2014-07-24)
 ------------------
 
