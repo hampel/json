@@ -51,5 +51,3 @@ class Json
 		return $decoded_data;
 	}
 }
-
-?>
