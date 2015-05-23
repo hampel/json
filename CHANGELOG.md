@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.2.2 (2015-05-23)
+------------------
+
+* removed redundant closing php tags
+
 2.2.1 (2014-12-17)
 ------------------
 
@@ -15,6 +20,11 @@ CHANGELOG
 * changed JsonException to use new PHP 5.4 shortened array syntax
 * changed JsonTest unit tests to use new PHO 5.4 shortened array syntax
 * mininum PHP version set to 5.4.0 in composer.json
+
+2.1.2 (2015-05-23)
+------------------
+
+* removed redundant closing php tags
 
 2.1.1 (2014-12-17)
 ------------------
