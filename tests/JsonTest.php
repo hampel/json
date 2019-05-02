@@ -1,6 +1,8 @@
 <?php namespace Hampel\Json;
 
-class JsonTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class JsonTest extends TestCase
 {
 	public function testEncode()
 	{
@@ -29,7 +31,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
 	public function testEncodeBroken()
 	{
-		$this->setExpectedException('\Hampel\Json\JsonException', 'Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
+		$this->expectException(JsonException::class, 'Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
 		$error = Json::encode([pack("H*" ,'c32e')]);
 	}
 
@@ -45,20 +47,20 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
 	public function testDecodeBrokenSyntaxError()
 	{
-		$this->setExpectedException('\Hampel\Json\JsonException', 'Error decoding JSON: Syntax error');
+		$this->expectException(JsonException::class, 'Error decoding JSON: Syntax error');
 		$bad_json = "{ 'bar': 'baz' }";
 		$error = Json::decode($bad_json);
 	}
 
 	public function testEncodeNaN()
 	{
-		$this->setExpectedException('\Hampel\Json\JsonException', 'Error encoding JSON: The value passed to json_encode() includes either NAN or INF');
+		$this->expectException(JsonException::class, 'Error encoding JSON: The value passed to json_encode() includes either NAN or INF');
 		$error = Json::encode(NAN);
 	}
 
 	public function testDecodeBrokenStackDepth()
 	{
-		$this->setExpectedException('\Hampel\Json\JsonException', 'Error decoding JSON: The maximum stack depth has been exceeded');
+		$this->expectException(JsonException::class, 'Error decoding JSON: The maximum stack depth has been exceeded');
 
 		$json = json_encode(
 			[
