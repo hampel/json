@@ -1,6 +1,11 @@
 Hampel Json
 ===========
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/hampel/json.svg?style=flat-square)](https://packagist.org/packages/hampel/json)
+[![Total Downloads](https://img.shields.io/packagist/dt/hampel/json.svg?style=flat-square)](https://packagist.org/packages/hampel/json)
+[![Open Issues](https://img.shields.io/bitbucket/issues/hampel/json.svg?style=flat-square)](https://bitbucket.org/hampel/json/issues)
+[![License](https://img.shields.io/packagist/l/hampel/json.svg?style=flat-square)](https://packagist.org/packages/hampel/json)
+
 A simple wrapper for `json_encode` and `json_decode` with error handling
 
 By [Simon Hampel](https://twitter.com/SimonHampel).
