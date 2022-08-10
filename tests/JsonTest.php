@@ -31,8 +31,10 @@ class JsonTest extends TestCase
 
 	public function testEncodeBroken()
 	{
-		$this->expectException(JsonException::class, 'Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
-		$error = Json::encode([pack("H*" ,'c32e')]);
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
+
+		Json::encode([pack("H*" ,'c32e')]);
 	}
 
 	public function testDecode()
@@ -47,20 +49,25 @@ class JsonTest extends TestCase
 
 	public function testDecodeBrokenSyntaxError()
 	{
-		$this->expectException(JsonException::class, 'Error decoding JSON: Syntax error');
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error decoding JSON: Syntax error');
+
 		$bad_json = "{ 'bar': 'baz' }";
-		$error = Json::decode($bad_json);
+		Json::decode($bad_json);
 	}
 
 	public function testEncodeNaN()
 	{
-		$this->expectException(JsonException::class, 'Error encoding JSON: The value passed to json_encode() includes either NAN or INF');
-		$error = Json::encode(NAN);
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error encoding JSON: The value passed to json_encode() includes either NAN or INF');
+
+		Json::encode(NAN);
 	}
 
 	public function testDecodeBrokenStackDepth()
 	{
-		$this->expectException(JsonException::class, 'Error decoding JSON: The maximum stack depth has been exceeded');
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error decoding JSON: The maximum stack depth has been exceeded');
 
 		$json = json_encode(
 			[
@@ -77,6 +84,6 @@ class JsonTest extends TestCase
 			]
 		);
 
-		$error = Json::decode($json, true, 3);
+		Json::decode($json, true, 3);
 	}
 }
