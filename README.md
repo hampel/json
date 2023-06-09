@@ -36,26 +36,28 @@ All parameters are the same as specified for the PHP functions json_encode and j
 The main difference that this class provides is that it throws exceptions when there are errors and translates the
 error codes into meaningful text for you automatically.
 
-    <?php
+```php
+<?php
 
-    use Hampel\Json\Json;
-    use Hampel\Json\JsonException;
+use Hampel\Json\Json;
+use Hampel\Json\JsonException;
 
-	$data = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+$data = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
 
-    // Encode a variable as JSON:
-    echo Json::encode($data);
+// Encode a variable as JSON:
+echo Json::encode($data);
 
-	// Encode options
-	$options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP;
-    echo Json::encode($data, $options);
+// Encode options
+$options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP;
+echo Json::encode($data, $options);
 
-    // Decode JSON:
-    print_r(Json::decode('{"a":1,"b":2,"c":3,"d":4,"e":5}'));
+// Decode JSON:
+print_r(Json::decode('{"a":1,"b":2,"c":3,"d":4,"e":5}'));
 
-    // Error handling
-    try {
-        Json::decode('{"a":1,"b":2,"c":3,"d":4,"e":5'); // missing }
-    } catch (JsonException $e) {
-        echo "Oops: " . $e->getMessage();
-    }
+// Error handling
+try {
+    Json::decode('{"a":1,"b":2,"c":3,"d":4,"e":5'); // missing }
+} catch (JsonException $e) {
+    echo "Oops: " . $e->getMessage();
+}
+```
