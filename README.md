@@ -16,13 +16,9 @@ render this package obsolete.
 Installation
 ------------
 
-The recommended way of installing Hampel Json is through [Composer](http://getcomposer.org):
+To install using composer, run the following command:
 
-    {
-        "require": {
-            "hampel/json": "^2.0"
-        }
-    }
+`composer require hampel/json`
 
 Note that there are three versions of this package, depending on the version of PHP you use:
 
