@@ -8,7 +8,7 @@ Hampel Json
 
 A simple wrapper for `json_encode` and `json_decode` with exception based error handling
 
-By [Simon Hampel](https://twitter.com/SimonHampel).
+By [Simon Hampel](mailto:simon@hampelgroup.com)
 
 __Note:__ as of PHP v7.3 there is now a `JSON_THROW_ON_ERROR` option for both native commands which should effectively
 render this package obsolete.
