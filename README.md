@@ -6,7 +6,7 @@ Hampel Json
 [![Open Issues](https://img.shields.io/bitbucket/issues/hampel/json.svg?style=flat-square)](https://bitbucket.org/hampel/json/issues)
 [![License](https://img.shields.io/packagist/l/hampel/json.svg?style=flat-square)](https://packagist.org/packages/hampel/json)
 
-A simple wrapper for `json_encode` and `json_decode` with error handling
+A simple wrapper for `json_encode` and `json_decode` with exception based error handling
 
 By [Simon Hampel](https://twitter.com/SimonHampel).
 
