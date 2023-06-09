@@ -9,13 +9,13 @@
         }
     ],
     "support": {
-        "issues": "https://bitbucket.org/hampel/json/issues",
-        "source": "https://bitbucket.org/hampel/json/src"
+        "issues": "https://github.com/hampel/json/issues",
+        "source": "https://github.com/hampel/json"
     },
     "keywords": [
         "json"
     ],
-    "homepage": "https://bitbucket.org/hampel/json",
+    "homepage": "https://github.com/hampel/json",
     "license": [
         "MIT"
     ],
