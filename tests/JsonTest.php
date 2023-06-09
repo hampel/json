@@ -1,5 +1,7 @@
-<?php namespace Hampel\Json;
+<?php namespace Tests;
 
+use Hampel\Json\Json;
+use Hampel\Json\JsonException;
 use PHPUnit\Framework\TestCase;
 
 class JsonTest extends TestCase

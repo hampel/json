@@ -33,7 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Hampel\\Json\\": "tests/"
+            "Tests\\": "tests/"
         }
     }
 }
