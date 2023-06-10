@@ -1,6 +1,6 @@
 {
     "name": "hampel/json",
-    "description": "A simple wrapper for `json_encode` and `json_decode` with exception based error handling",
+    "description": "A simple wrapper for json_encode and json_decode with exception based error handling",
     "authors": [
         {
             "name": "Simon Hampel",
