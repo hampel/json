@@ -4,8 +4,15 @@ CHANGELOG
 Unreleased
 ----------
 
-No changes to `src` — everything below is packaging, tests or documentation, so this release is
-functionally identical to 2.4.1 for calling code.
+**Breaking**
+
+* raised the minimum PHP version to 8.3, replacing the `>=5.5.0` constraint that had not been
+  tested since 2014. PHP 8.1 is past end of security support and 8.2 reaches it on 31 December
+  2026; the test toolchain cannot run below 8.1 in any case. Nothing is taken away from anyone —
+  Composer resolves older installs to 2.4.1, which continues to claim `>=5.5.0`.
+
+The behaviour of `Json::encode` and `Json::decode` is unchanged; everything else below is
+packaging, tests or documentation.
 
 **Packaging**
 
