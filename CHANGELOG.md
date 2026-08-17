@@ -1,6 +1,14 @@
 CHANGELOG
 =========
 
+Unreleased
+----------
+
+* added .gitattributes to normalise line endings to LF
+* excluded tests, phpunit.xml and dotfiles from the dist archive via export-ignore
+* added CLAUDE.md with build and test commands and architecture notes
+* ignore .idea and .phpunit.cache
+
 2.4.1 (2019-10-14)
 ------------------
 
