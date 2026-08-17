@@ -16,6 +16,17 @@ Unreleased
   to be chained, which the old hint prevented. It matches the parent `\Exception` signature. A
   subclass that overrides the constructor with an `\Exception` hint will need updating.
 
+* `Json` is now `final`. It is a static utility with no state and no extension points.
+  `JsonException` remains extensible, since subclassing an exception is a reasonable thing for
+  a consumer to do
+* signatures now carry native types — `encode(mixed $data, int $options = 0, int $depth = 512):
+  string` and `decode(string $data, bool $assoc = false, int $depth = 512, int $options = 0):
+  mixed`, and `JsonException::$messages` is `array`. An argument that cannot be coerced now
+  raises a `TypeError` rather than reaching `json_encode()`
+* both classes declare `strict_types=1`. This governs calls made *from* these files; a consumer
+  calling `Json::encode()` from a non-strict file still gets the usual coercion
+* the class constants are typed (`public const bool DECODE_ASSOC`), which requires PHP 8.3
+
 **Fixed**
 
 * `Json::decode('null')` returned an exception instead of `null`. `null` is valid JSON, but a
@@ -27,6 +38,17 @@ Unreleased
 
 Apart from that fix, `Json::encode` and `Json::decode` behave as before; everything else below
 is packaging, tests or documentation.
+
+**Code style**
+
+* adopted PSR-12 throughout, enforced by Laravel Pint — `composer format` applies it,
+  `composer lint` checks it, and CI fails on a violation. Added .editorconfig to match
+* removed the `@` error-suppression operators from the `json_*` calls. These functions emit no
+  diagnostics on any supported PHP version, so the operators could only have masked a genuine
+  error from elsewhere
+* `!=` is now `!==`, and the low-precedence `OR` is now `||`
+* raised PHPStan from level 6 to level 10, which the native types make reachable. Two
+  `@param int<1, max> $depth` annotations record that a depth of zero or less is not valid
 
 **Packaging**
 

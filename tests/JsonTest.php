@@ -148,20 +148,8 @@ class JsonTest extends TestCase
         $this->expectException(JsonException::class);
         $this->expectExceptionMessage('Error decoding JSON: The maximum stack depth has been exceeded');
 
-        $json = json_encode(
-            [
-                1 => [
-                    'English' => [
-                        'One',
-                        'January'
-                    ],
-                    'French' => [
-                        'Une',
-                        'Janvier'
-                    ]
-                ]
-            ]
-        );
+        // four levels deep: object, object, array, string
+        $json = '{"1":{"English":["One","January"],"French":["Une","Janvier"]}}';
 
         Json::decode($json, true, 3);
     }

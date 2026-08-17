@@ -22,8 +22,8 @@ vendor/bin/phpunit tests/JsonTest.php                    # single file
 php8.5 vendor/bin/phpunit                                # ceiling of the supported range
 ```
 
-`composer check` runs PHPStan then the suite — the same two things CI runs, so a green check
-locally means a green build.
+`composer check` runs Pint, PHPStan and the suite — the same three things CI runs, so a green
+check locally means a green build.
 
 PHPUnit 12 with `failOnRisky`, `failOnWarning`, `failOnDeprecation` and `failOnNotice` enabled, so
 a test that emits output, or code in `src` that triggers a deprecation, fails the run. Note that
@@ -46,11 +46,11 @@ a test that emits output, or code in `src` that triggers a deprecation, fails th
 
 ## Conventions
 
-The source is written in a pre-7.0 idiom: tab indentation, Allman braces, `<?php namespace Foo;`
-on one line, the `OR` keyword, and no type declarations. That is history, not a requirement — the
-floor is now PHP >= 8.3 (`composer.json`), which permits all of it.
+PSR-12, enforced by Pint. `composer format` applies it, `composer lint` checks it, and CI fails
+the build on a violation — so do not hand-format, just run it. `.editorconfig` matches.
 
-Converting to a modern style is a deliberate decision that has not been taken. Until it is, match
-the surrounding style rather than mixing idioms within a file, and do not modernise incidentally.
+The source targets PHP >= 8.3 and uses it: `declare(strict_types=1)`, native parameter and return
+types, and typed class constants. PHPStan runs at **level 10** across the whole 8.3–8.5 range, so
+new code needs complete type information to pass.
 
 Update `CHANGELOG.md` (newest first, `x.y.z (YYYY-MM-DD)` heading) for any released change.

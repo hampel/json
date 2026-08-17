@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hampel\Json;
 
 class JsonException extends \Exception
 {
     /** @var array<int, string> Map of json_last_error() codes to readable text */
-    public static $messages = [
+    public static array $messages = [
         JSON_ERROR_NONE => "No error has occurred",
         JSON_ERROR_DEPTH => "The maximum stack depth has been exceeded",
         JSON_ERROR_STATE_MISMATCH => "Invalid or malformed JSON",
@@ -18,11 +20,11 @@ class JsonException extends \Exception
     ];
 
     /**
-     * @param string $message	Prefix for the message; the text for $code is appended to it
-     * @param int $code			A json_last_error() code
+     * @param string $message Prefix for the message; the text for $code is appended to it
+     * @param int $code A json_last_error() code
      * @param \Throwable|null $previous
      */
-    public function __construct($message = "", $code = 0, ?\Throwable $previous = null)
+    public function __construct(string $message = "", int $code = 0, ?\Throwable $previous = null)
     {
         if (array_key_exists($code, self::$messages)) {
             $msg = self::$messages[$code];
