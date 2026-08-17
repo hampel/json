@@ -61,6 +61,8 @@ is packaging, tests or documentation.
   `JsonException::$messages`. Seven of the nine `JSON_ERROR_*` codes are now exercised;
   `JSON_ERROR_NONE` is no longer reachable and `JSON_ERROR_STATE_MISMATCH` cannot be triggered
   through the public API
+* added a GitHub Actions workflow: the suite on PHP 8.3, 8.4 and 8.5, plus PHPStan and
+  `composer validate --strict` once, on every push and on the first of each month
 * added CLAUDE.md with build and test commands, architecture notes and the conventions this
   package is written to
 

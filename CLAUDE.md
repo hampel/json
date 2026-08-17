@@ -22,8 +22,12 @@ vendor/bin/phpunit tests/JsonTest.php                    # single file
 php8.5 vendor/bin/phpunit                                # ceiling of the supported range
 ```
 
-PHPUnit 10 with `failOnRisky`/`failOnWarning` enabled, so a test that emits output or triggers a
-warning fails.
+`composer check` runs PHPStan then the suite — the same two things CI runs, so a green check
+locally means a green build.
+
+PHPUnit 12 with `failOnRisky`, `failOnWarning`, `failOnDeprecation` and `failOnNotice` enabled, so
+a test that emits output, or code in `src` that triggers a deprecation, fails the run. Note that
+`failOnDeprecation` only covers paths listed in `<source>`.
 
 ## Architecture
 

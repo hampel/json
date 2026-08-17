@@ -1,6 +1,7 @@
 JSON Wrapper
 ============
 
+[![Tests](https://github.com/hampel/json/actions/workflows/tests.yml/badge.svg)](https://github.com/hampel/json/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/hampel/json.svg?style=flat-square)](https://packagist.org/packages/hampel/json)
 [![Total Downloads](https://img.shields.io/packagist/dt/hampel/json.svg?style=flat-square)](https://packagist.org/packages/hampel/json)
 [![Open Issues](https://img.shields.io/github/issues-raw/hampel/json.svg?style=flat-square)](https://github.com/hampel/json/issues)
