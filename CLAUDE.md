@@ -8,16 +8,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `json_encode`/`json_decode` so that errors raise `Hampel\Json\JsonException` instead of returning
 `false`/`null`, with `json_last_error()` codes translated to readable text.
 
-The README notes the package is effectively obsolete since PHP 7.3 added `JSON_THROW_ON_ERROR`; it
-is maintained for backwards compatibility, not extended. Treat changes as maintenance.
+PHP 7.3 added `JSON_THROW_ON_ERROR`, which covers most of what this package does, and the README
+says so. It is kept anyway, deliberately: it is small, complete, and several other `hampel/*`
+packages depend on it. Treat changes as maintenance — the API is not being extended.
 
 ## Commands
 
 ```bash
 composer install
-vendor/bin/phpunit                                   # full suite (8 tests)
+vendor/bin/phpunit                                       # full suite
 vendor/bin/phpunit --filter testDecodeBrokenStackDepth   # single test
-vendor/bin/phpunit tests/JsonTest.php                # single file
+vendor/bin/phpunit tests/JsonTest.php                    # single file
+php8.5 vendor/bin/phpunit                                # ceiling of the supported range
 ```
 
 PHPUnit 10 with `failOnRisky`/`failOnWarning` enabled, so a test that emits output or triggers a
@@ -38,9 +40,11 @@ warning fails.
 
 ## Conventions
 
-Source targets PHP >= 5.5 (`composer.json`), so the code deliberately avoids anything newer — no
-scalar/return types, no `??`, no arrow functions. It also uses tab indentation, Allman braces,
-`<?php namespace Foo;` on one line, and the `OR` keyword. Match that style; do not modernise it
-incidentally.
+The source is written in a pre-7.0 idiom: tab indentation, Allman braces, `<?php namespace Foo;`
+on one line, the `OR` keyword, and no type declarations. That is history, not a requirement — the
+floor is now PHP >= 8.3 (`composer.json`), which permits all of it.
+
+Converting to a modern style is a deliberate decision that has not been taken. Until it is, match
+the surrounding style rather than mixing idioms within a file, and do not modernise incidentally.
 
 Update `CHANGELOG.md` (newest first, `x.y.z (YYYY-MM-DD)` heading) for any released change.
