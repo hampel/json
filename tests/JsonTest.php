@@ -1,4 +1,4 @@
-<?php namespace Tests;
+<?php namespace Hampel\Json\Tests;
 
 use Hampel\Json\Json;
 use Hampel\Json\JsonException;

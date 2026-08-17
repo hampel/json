@@ -35,7 +35,8 @@ packaging, tests or documentation.
 
 * PHPUnit updated from `~7.0|~8.0` to `^10.0`, via v9, with phpunit.xml migrated to the v10
   schema
-* moved the tests into their own `Tests` namespace
+* moved the tests into their own namespace, now vendor-scoped as `Hampel\Json\Tests` rather
+  than a bare top-level `Tests`
 * tests use `expectExceptionMessage` rather than asserting on the message by hand
 * added CLAUDE.md with build and test commands, architecture notes and the conventions this
   package is written to

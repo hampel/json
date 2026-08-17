@@ -31,7 +31,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Hampel\\Json\\Tests\\": "tests/"
         }
     },
     "config": {

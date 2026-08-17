@@ -36,7 +36,7 @@ warning fails.
   `json_last_error()` code, then appends the matching text from the static `$messages` map (or
   `"Unknown Error"`). Tests assert against the full concatenated message, so editing a string in
   `$messages` breaks the corresponding test in `tests/JsonTest.php`.
-- Test namespace is `Tests\` (autoload-dev), separate from `Hampel\Json\`.
+- Test namespace is `Hampel\Json\Tests\` (autoload-dev), mapped to `tests/`.
 
 ## Conventions
 
