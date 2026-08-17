@@ -4,98 +4,87 @@ CHANGELOG
 Unreleased
 ----------
 
+Requires PHP 8.3 or later. `Json::encode()` and `Json::decode()` do the same job in the same way;
+the consumer-visible changes are the PHP requirement, the signatures, and one bug fix.
+
 **Breaking**
 
-* raised the minimum PHP version to 8.3, replacing the `>=5.5.0` constraint that had not been
-  tested since 2014. PHP 8.1 is past end of security support and 8.2 reaches it on 31 December
-  2026; the test toolchain cannot run below 8.1 in any case. Nothing is taken away from anyone —
-  Composer resolves older installs to 2.4.1, which continues to claim `>=5.5.0`.
-
-* `JsonException::__construct()` types `$previous` as `?\Throwable` rather than `\Exception`.
-  This silences an implicit-nullable deprecation on PHP 8.4 and later, and allows an `\Error`
-  to be chained, which the old hint prevented. It matches the parent `\Exception` signature. A
-  subclass that overrides the constructor with an `\Exception` hint will need updating.
-
-* `Json` is now `final`. It is a static utility with no state and no extension points.
-  `JsonException` remains extensible, since subclassing an exception is a reasonable thing for
-  a consumer to do
-* signatures now carry native types — `encode(mixed $data, int $options = 0, int $depth = 512):
+* minimum PHP raised to 8.3, replacing a `>=5.5.0` constraint that had not been tested since
+  2014. PHP 8.1 is past end of security support, 8.2 reaches it on 31 December 2026, and the
+  test toolchain cannot run below 8.1 in any case. Nothing is taken from anyone: Composer
+  resolves older installs to 2.4.1, which goes on claiming `>=5.5.0`
+* `Json` is now `final` — it is a static utility with no state and no extension points.
+  `JsonException` stays extensible, since subclassing an exception is reasonable
+* both methods carry native types: `encode(mixed $data, int $options = 0, int $depth = 512):
   string` and `decode(string $data, bool $assoc = false, int $depth = 512, int $options = 0):
-  mixed`, and `JsonException::$messages` is `array`. An argument that cannot be coerced now
-  raises a `TypeError` rather than reaching `json_encode()`
-* both classes declare `strict_types=1`. This governs calls made *from* these files; a consumer
-  calling `Json::encode()` from a non-strict file still gets the usual coercion
-* the class constants are typed (`public const bool DECODE_ASSOC`), which requires PHP 8.3
+  mixed`. An argument that cannot be coerced now raises a `TypeError` rather than reaching
+  `json_encode()`
+* `JsonException::__construct()` types `$previous` as `?\Throwable` rather than `\Exception`.
+  This clears an implicit-nullable deprecation on PHP 8.4 and later, and allows an `\Error` to be
+  chained, which the old hint prevented. A subclass overriding the constructor with an
+  `\Exception` hint will need updating
+* `JsonException::$messages` is typed `array`, and the class constants are typed
+  (`public const bool DECODE_ASSOC`), which is what requires 8.3 specifically
+* both classes declare `strict_types=1`. This governs calls made *from* these files; calling
+  `Json::encode()` from a non-strict file still gets the usual coercion
 
 **Fixed**
 
-* `Json::decode('null')` returned an exception instead of `null`. `null` is valid JSON, but a
-  legitimate `null` result was indistinguishable from a failure, so decoding it threw a
+* `Json::decode('null')` threw instead of returning `null`. `null` is valid JSON, but a
+  legitimate `null` result was indistinguishable from a failure, so decoding it raised a
   `JsonException` whose message read "Error decoding JSON: No error has occurred". `decode()`
-  now relies solely on `json_last_error()`, which is reset by every `json_*` call and is the
-  authoritative signal. `false`, `0` and `''` were unaffected and remain so. This is a
-  behaviour change for anyone who depended on the exception.
+  now relies solely on `json_last_error()`, which every `json_*` call resets and which is the
+  authoritative signal. `false`, `0` and `''` were unaffected and remain so
+* the docblocks on both methods opened with `/*` rather than `/**`, so neither static analysis
+  nor an IDE had ever read them. Two of the documented types were wrong once visible:
+  `decode()`'s `$options` was `array` where it is an `int` bitmask, and its return was `string`
+  where it is `mixed`
 
-Apart from that fix, `Json::encode` and `Json::decode` behave as before; everything else below
-is packaging, tests or documentation.
+**Internal**
 
-**Code style**
-
-* adopted PSR-12 throughout, enforced by Laravel Pint — `composer format` applies it,
-  `composer lint` checks it, and CI fails on a violation. Added .editorconfig to match
-* removed the `@` error-suppression operators from the `json_*` calls. These functions emit no
+* removed the `@` error-suppression operators from the `json_*` calls. Those functions emit no
   diagnostics on any supported PHP version, so the operators could only have masked a genuine
   error from elsewhere
 * `!=` is now `!==`, and the low-precedence `OR` is now `||`
-* raised PHPStan from level 6 to level 10, which the native types make reachable. Two
-  `@param int<1, max> $depth` annotations record that a depth of zero or less is not valid
+
+**Tooling**
+
+* PSR-12 throughout, enforced by Laravel Pint, with a matching .editorconfig
+* PHPStan at level 10, analysing `src` and `tests` against PHP 8.3 to 8.5 in a single pass via
+  `phpVersion`
+* PHPUnit updated from `~7.0|~8.0` to `^12.0`, config migrated to the 12.5 schema, and
+  `failOnDeprecation` and `failOnNotice` enabled so a deprecation raised from `src` fails the run
+* tests moved into a vendor-scoped `Hampel\Json\Tests` namespace, rather than a bare `Tests`
+* covered the error paths that had no tests: recursion, unsupported type, control character, the
+  encode-side depth limit, and the "Unknown Error" fallback. Seven of the nine `JSON_ERROR_*`
+  codes are now exercised; `JSON_ERROR_NONE` is no longer reachable and
+  `JSON_ERROR_STATE_MISMATCH` cannot be triggered through the public API
+* GitHub Actions workflow running the suite on 8.3, 8.4 and 8.5, plus Pint, PHPStan and
+  `composer validate --strict` once — on every push and on the first of each month
+* `composer check` runs lint, analyse and test; `composer format` applies the style
 
 **Packaging**
 
 * repository moved from Bitbucket to GitHub; `support` and `homepage` URLs updated to match
 * added LICENSE.md (MIT)
-* added .gitattributes: line endings normalised to LF, and tests, phpunit.xml and the dotfiles
-  excluded from the distributed archive with `export-ignore`
-* reworded the package description and removed the backticks, which Packagist rendered raw
-* .gitignore now also covers .idea, .phpunit.cache and CLAUDE.local.md
-* `license` is now the SPDX string `"MIT"` rather than a single-element array, which declared
+* `license` is the SPDX string `"MIT"` rather than a single-element array, which declared
   disjunctive licensing
-* added `config.sort-packages`, and `composer test`, `composer analyse` and `composer check`
-  scripts
-* added PHPStan at level 6, analysing `src` and `tests` against PHP 8.3 to 8.5 in a single run
-  via `phpVersion`. phpstan.neon is excluded from the distributed archive
-* corrected the docblocks on `Json::encode()` and `Json::decode()`, which opened with `/*`
-  rather than `/**` and so were invisible to static analysis and IDEs. Two of the documented
-  types were wrong once they became visible: `decode()`'s `$options` was `array` where it is a
-  bitmask `int`, and its return was `string` where it is `mixed`
-
-**Tests and tooling**
-
-* PHPUnit updated from `~7.0|~8.0` to `^12.0`, via v9 and v10, with phpunit.xml migrated to the
-  v12.5 schema. PHPUnit 12 requires PHP >= 8.3, matching the new floor
-* `failOnDeprecation` and `failOnNotice` enabled, so a deprecation raised from `src` fails the
-  run rather than being reported as an aside
-* moved the tests into their own namespace, now vendor-scoped as `Hampel\Json\Tests` rather
-  than a bare top-level `Tests`
-* tests use `expectExceptionMessage` rather than asserting on the message by hand
-* covered the error paths that had no tests: recursion, unsupported type, control character,
-  the encode-side depth limit, and the "Unknown Error" fallback for a code with no entry in
-  `JsonException::$messages`. Seven of the nine `JSON_ERROR_*` codes are now exercised;
-  `JSON_ERROR_NONE` is no longer reachable and `JSON_ERROR_STATE_MISMATCH` cannot be triggered
-  through the public API
-* added a GitHub Actions workflow: the suite on PHP 8.3, 8.4 and 8.5, plus PHPStan and
-  `composer validate --strict` once, on every push and on the first of each month
-* added CLAUDE.md with build and test commands, architecture notes and the conventions this
-  package is written to
+* added .gitattributes: line endings normalised to LF, and tests, config and dotfiles kept out
+  of the distributed archive with `export-ignore` — the archive holds README, CHANGELOG, LICENSE,
+  composer.json and `src` only
+* reworded the package description and removed the backticks, which Packagist rendered raw
+* added `config.sort-packages`
+* .gitignore now also covers .idea, .phpunit.cache and CLAUDE.local.md
 
 **Documentation**
 
-* README converted to GitHub-compatible markdown, with shields.io badges
+* README: removed the claim that v2.1, v2.2 and v2.3 are "maintained in parallel", untrue since
+  2015, and replaced it with the actual PHP requirement. Added an "Upgrading from 2.x" section,
+  reframed the note about `JSON_THROW_ON_ERROR` to say why the package is still here, and
+  modernised the array syntax in the example
+* README converted to GitHub-compatible markdown, with shields.io badges, and a CI badge
 * updated the installation instructions and contact details
-* README: removed the claim that v2.1, v2.2 and v2.3 are "maintained in parallel", which had
-  not been true since 2015, and replaced it with the actual PHP requirement. Added an
-  "Upgrading from 2.x" section, reframed the note about `JSON_THROW_ON_ERROR` to say why the
-  package is still here, and modernised the array syntax in the example
+* added CLAUDE.md with build and test commands, architecture notes and conventions
 
 2.4.1 (2019-10-14)
 ------------------
