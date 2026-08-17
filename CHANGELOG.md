@@ -33,8 +33,10 @@ packaging, tests or documentation.
 
 **Tests and tooling**
 
-* PHPUnit updated from `~7.0|~8.0` to `^10.0`, via v9, with phpunit.xml migrated to the v10
-  schema
+* PHPUnit updated from `~7.0|~8.0` to `^12.0`, via v9 and v10, with phpunit.xml migrated to the
+  v12.5 schema. PHPUnit 12 requires PHP >= 8.3, matching the new floor
+* `failOnDeprecation` and `failOnNotice` enabled, so a deprecation raised from `src` fails the
+  run rather than being reported as an aside
 * moved the tests into their own namespace, now vendor-scoped as `Hampel\Json\Tests` rather
   than a bare top-level `Tests`
 * tests use `expectExceptionMessage` rather than asserting on the message by hand
