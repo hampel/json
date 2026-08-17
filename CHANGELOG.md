@@ -27,6 +27,9 @@ packaging, tests or documentation.
   excluded from the distributed archive with `export-ignore`
 * reworded the package description and removed the backticks, which Packagist rendered raw
 * .gitignore now also covers .idea, .phpunit.cache and CLAUDE.local.md
+* `license` is now the SPDX string `"MIT"` rather than a single-element array, which declared
+  disjunctive licensing
+* added `config.sort-packages`, and a `composer test` script
 
 **Tests and tooling**
 

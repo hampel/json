@@ -16,9 +16,7 @@
         "json"
     ],
     "homepage": "https://github.com/hampel/json",
-    "license": [
-        "MIT"
-    ],
+    "license": "MIT",
     "require": {
         "php": ">=8.3",
         "ext-json": "*"
@@ -35,5 +33,11 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
