@@ -22,6 +22,7 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "laravel/pint": "^1.30",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^12.0"
     },
@@ -41,7 +42,10 @@
     "scripts": {
         "test": "phpunit",
         "analyse": "phpstan analyse",
+        "format": "pint",
+        "lint": "pint --test",
         "check": [
+            "@lint",
             "@analyse",
             "@test"
         ]
