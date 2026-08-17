@@ -14,7 +14,7 @@ class JsonException extends \Exception
 		JSON_ERROR_UNSUPPORTED_TYPE => "A value of an unsupported type was given to json_encode(), such as a resource",
 	];
 
-	public function __construct($message = "", $code = 0, \Exception $previous = null)
+	public function __construct($message = "", $code = 0, ?\Throwable $previous = null)
 	{
 		if (array_key_exists($code, self::$messages)) $msg = self::$messages[$code];
 		else $msg = "Unknown Error";

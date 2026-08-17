@@ -11,6 +11,11 @@ Unreleased
   2026; the test toolchain cannot run below 8.1 in any case. Nothing is taken away from anyone —
   Composer resolves older installs to 2.4.1, which continues to claim `>=5.5.0`.
 
+* `JsonException::__construct()` types `$previous` as `?\Throwable` rather than `\Exception`.
+  This silences an implicit-nullable deprecation on PHP 8.4 and later, and allows an `\Error`
+  to be chained, which the old hint prevented. It matches the parent `\Exception` signature. A
+  subclass that overrides the constructor with an `\Exception` hint will need updating.
+
 The behaviour of `Json::encode` and `Json::decode` is unchanged; everything else below is
 packaging, tests or documentation.
 

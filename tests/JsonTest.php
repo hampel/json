@@ -66,6 +66,15 @@ class JsonTest extends TestCase
 		Json::encode(NAN);
 	}
 
+	public function testExceptionChainsAnyThrowable()
+	{
+		$previous = new \Error("the underlying cause");
+
+		$exception = new JsonException("Error decoding JSON:", JSON_ERROR_SYNTAX, $previous);
+
+		$this->assertSame($previous, $exception->getPrevious());
+	}
+
 	public function testDecodeBrokenStackDepth()
 	{
 		$this->expectException(JsonException::class);
