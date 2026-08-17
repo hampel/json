@@ -4,10 +4,31 @@ CHANGELOG
 Unreleased
 ----------
 
-* added .gitattributes to normalise line endings to LF
-* excluded tests, phpunit.xml and dotfiles from the dist archive via export-ignore
-* added CLAUDE.md with build and test commands and architecture notes
-* ignore .idea and .phpunit.cache
+No changes to `src` — everything below is packaging, tests or documentation, so this release is
+functionally identical to 2.4.1 for calling code.
+
+**Packaging**
+
+* repository moved from Bitbucket to GitHub; `support` and `homepage` URLs updated to match
+* added LICENSE.md (MIT)
+* added .gitattributes: line endings normalised to LF, and tests, phpunit.xml and the dotfiles
+  excluded from the distributed archive with `export-ignore`
+* reworded the package description and removed the backticks, which Packagist rendered raw
+* .gitignore now also covers .idea, .phpunit.cache and CLAUDE.local.md
+
+**Tests and tooling**
+
+* PHPUnit updated from `~7.0|~8.0` to `^10.0`, via v9, with phpunit.xml migrated to the v10
+  schema
+* moved the tests into their own `Tests` namespace
+* tests use `expectExceptionMessage` rather than asserting on the message by hand
+* added CLAUDE.md with build and test commands, architecture notes and the conventions this
+  package is written to
+
+**Documentation**
+
+* README converted to GitHub-compatible markdown, with shields.io badges
+* updated the installation instructions and contact details
 
 2.4.1 (2019-10-14)
 ------------------
