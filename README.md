@@ -11,8 +11,9 @@ A simple wrapper for `json_encode` and `json_decode` with exception based error 
 
 By [Simon Hampel](mailto:simon@hampelgroup.com)
 
-__Note:__ as of PHP v7.3 there is now a `JSON_THROW_ON_ERROR` option for both native commands which should effectively
-render this package obsolete.
+__Note:__ since PHP v7.3, the native functions accept a `JSON_THROW_ON_ERROR` flag which covers most of what this
+package does. This package remains for the cleaner call signature, for the readable error messages it produces, and
+for the packages that already depend on it. For new code, the native flag is usually the better choice.
 
 Installation
 ------------
@@ -21,14 +22,21 @@ To install using composer, run the following command:
 
 `composer require hampel/json`
 
-Note that there are three versions of this package, depending on the version of PHP you use:
+Requires PHP 8.3 or later.
 
-* v2.1 supports PHP >= v5.3.3
-* v2.2 supports PHP >= v5.4.0
-* v2.3 supports PHP >= v5.5.0
+Older versions of PHP resolve to earlier releases automatically — the 2.x line supports PHP 5.5 and later, and remains
+installable. It is no longer maintained.
 
-The three versions will be maintained in parallel
-    
+Upgrading from 2.x
+------------------
+
+* PHP 8.3 is now the minimum. Nothing changes for consumers who stay on 2.4.1
+* `Json::decode('null')` returns `null` instead of throwing. `null` is valid JSON, but a legitimate `null` result used
+  to be indistinguishable from a failure, so it raised an exception reading "No error has occurred"
+* `Json` is now `final`. `JsonException` is still extensible
+* both methods declare native parameter and return types, so an argument that cannot be coerced now raises a
+  `TypeError` rather than reaching `json_encode()`
+
 Usage
 -----
 
@@ -43,7 +51,7 @@ error codes into meaningful text for you automatically.
 use Hampel\Json\Json;
 use Hampel\Json\JsonException;
 
-$data = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+$data = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
 
 // Encode a variable as JSON:
 echo Json::encode($data);

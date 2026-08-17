@@ -92,6 +92,10 @@ is packaging, tests or documentation.
 
 * README converted to GitHub-compatible markdown, with shields.io badges
 * updated the installation instructions and contact details
+* README: removed the claim that v2.1, v2.2 and v2.3 are "maintained in parallel", which had
+  not been true since 2015, and replaced it with the actual PHP requirement. Added an
+  "Upgrading from 2.x" section, reframed the note about `JSON_THROW_ON_ERROR` to say why the
+  package is still here, and modernised the array syntax in the example
 
 2.4.1 (2019-10-14)
 ------------------
