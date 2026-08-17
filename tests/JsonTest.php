@@ -80,6 +80,59 @@ class JsonTest extends TestCase
 		Json::encode(NAN);
 	}
 
+	public function testDecodeControlCharacter(): void
+	{
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error decoding JSON: Control character error, possibly incorrectly encoded');
+
+		// a raw control character is not legal inside a JSON string
+		Json::decode("\"a\x01b\"");
+	}
+
+	public function testEncodeRecursion(): void
+	{
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error encoding JSON: The object or array passed to json_encode() include recursive references and cannot be encoded');
+
+		$data = [];
+		$data['self'] = &$data;
+
+		Json::encode($data);
+	}
+
+	public function testEncodeUnsupportedType(): void
+	{
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error encoding JSON: A value of an unsupported type was given to json_encode(), such as a resource');
+
+		$handle = fopen('php://memory', 'r');
+
+		try
+		{
+			Json::encode($handle);
+		}
+		finally
+		{
+			if ($handle !== false) fclose($handle);
+		}
+	}
+
+	public function testEncodeBrokenStackDepth(): void
+	{
+		$this->expectException(JsonException::class);
+		$this->expectExceptionMessage('Error encoding JSON: The maximum stack depth has been exceeded');
+
+		Json::encode([[['too deep']]], 0, 2);
+	}
+
+	public function testExceptionFallsBackToUnknownError(): void
+	{
+		// a code with no entry in JsonException::$messages
+		$exception = new JsonException("Error decoding JSON:", 999);
+
+		$this->assertSame('Error decoding JSON: Unknown Error', $exception->getMessage());
+	}
+
 	public function testExceptionChainsAnyThrowable(): void
 	{
 		$previous = new \Error("the underlying cause");

@@ -56,6 +56,11 @@ is packaging, tests or documentation.
 * moved the tests into their own namespace, now vendor-scoped as `Hampel\Json\Tests` rather
   than a bare top-level `Tests`
 * tests use `expectExceptionMessage` rather than asserting on the message by hand
+* covered the error paths that had no tests: recursion, unsupported type, control character,
+  the encode-side depth limit, and the "Unknown Error" fallback for a code with no entry in
+  `JsonException::$messages`. Seven of the nine `JSON_ERROR_*` codes are now exercised;
+  `JSON_ERROR_NONE` is no longer reachable and `JSON_ERROR_STATE_MISMATCH` cannot be triggered
+  through the public API
 * added CLAUDE.md with build and test commands, architecture notes and the conventions this
   package is written to
 
