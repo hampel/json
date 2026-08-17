@@ -29,7 +29,14 @@ packaging, tests or documentation.
 * .gitignore now also covers .idea, .phpunit.cache and CLAUDE.local.md
 * `license` is now the SPDX string `"MIT"` rather than a single-element array, which declared
   disjunctive licensing
-* added `config.sort-packages`, and a `composer test` script
+* added `config.sort-packages`, and `composer test`, `composer analyse` and `composer check`
+  scripts
+* added PHPStan at level 6, analysing `src` and `tests` against PHP 8.3 to 8.5 in a single run
+  via `phpVersion`. phpstan.neon is excluded from the distributed archive
+* corrected the docblocks on `Json::encode()` and `Json::decode()`, which opened with `/*`
+  rather than `/**` and so were invisible to static analysis and IDEs. Two of the documented
+  types were wrong once they became visible: `decode()`'s `$options` was `array` where it is a
+  bitmask `int`, and its return was `string` where it is `mixed`
 
 **Tests and tooling**
 

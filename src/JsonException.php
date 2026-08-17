@@ -2,6 +2,7 @@
 
 class JsonException extends \Exception
 {
+	/** @var array<int, string> Map of json_last_error() codes to readable text */
 	public static $messages = [
 		JSON_ERROR_NONE => "No error has occurred",
 		JSON_ERROR_DEPTH => "The maximum stack depth has been exceeded",
@@ -14,6 +15,11 @@ class JsonException extends \Exception
 		JSON_ERROR_UNSUPPORTED_TYPE => "A value of an unsupported type was given to json_encode(), such as a resource",
 	];
 
+	/**
+	 * @param string $message	Prefix for the message; the text for $code is appended to it
+	 * @param int $code			A json_last_error() code
+	 * @param \Throwable|null $previous
+	 */
 	public function __construct($message = "", $code = 0, ?\Throwable $previous = null)
 	{
 		if (array_key_exists($code, self::$messages)) $msg = self::$messages[$code];

@@ -6,14 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class JsonTest extends TestCase
 {
-	public function testEncode()
+	public function testEncode(): void
 	{
 		$data = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
 
 		$this->assertEquals(json_encode($data), Json::encode($data));
 	}
 
-	public function testEncodeWithOptions()
+	public function testEncodeWithOptions(): void
 	{
 		$data = ['<foo>',"'bar'",'"baz"','&blong&', "\xc3\xa9"];
 
@@ -22,7 +22,7 @@ class JsonTest extends TestCase
 		$this->assertEquals(json_encode($data, $bitmask), Json::encode($data, $bitmask));
 	}
 
-	public function testEncodeWithObject()
+	public function testEncodeWithObject(): void
 	{
 		$data = [[1,2,3]];
 
@@ -31,7 +31,7 @@ class JsonTest extends TestCase
 		$this->assertEquals(json_encode($data, $bitmask), Json::encode($data, $bitmask));
 	}
 
-	public function testEncodeBroken()
+	public function testEncodeBroken(): void
 	{
 		$this->expectException(JsonException::class);
 		$this->expectExceptionMessage('Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
@@ -39,7 +39,7 @@ class JsonTest extends TestCase
 		Json::encode([pack("H*" ,'c32e')]);
 	}
 
-	public function testDecode()
+	public function testDecode(): void
 	{
 		$data = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
 		$this->assertEquals(json_decode($data), Json::decode($data));
@@ -49,7 +49,7 @@ class JsonTest extends TestCase
 		$this->assertEquals(json_decode($data, true), Json::decode($data, Json::DECODE_ASSOC));
 	}
 
-	public function testDecodeBrokenSyntaxError()
+	public function testDecodeBrokenSyntaxError(): void
 	{
 		$this->expectException(JsonException::class);
 		$this->expectExceptionMessage('Error decoding JSON: Syntax error');
@@ -58,7 +58,7 @@ class JsonTest extends TestCase
 		Json::decode($bad_json);
 	}
 
-	public function testEncodeNaN()
+	public function testEncodeNaN(): void
 	{
 		$this->expectException(JsonException::class);
 		$this->expectExceptionMessage('Error encoding JSON: The value passed to json_encode() includes either NAN or INF');
@@ -66,7 +66,7 @@ class JsonTest extends TestCase
 		Json::encode(NAN);
 	}
 
-	public function testExceptionChainsAnyThrowable()
+	public function testExceptionChainsAnyThrowable(): void
 	{
 		$previous = new \Error("the underlying cause");
 
@@ -75,7 +75,7 @@ class JsonTest extends TestCase
 		$this->assertSame($previous, $exception->getPrevious());
 	}
 
-	public function testDecodeBrokenStackDepth()
+	public function testDecodeBrokenStackDepth(): void
 	{
 		$this->expectException(JsonException::class);
 		$this->expectExceptionMessage('Error decoding JSON: The maximum stack depth has been exceeded');
