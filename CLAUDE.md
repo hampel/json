@@ -43,7 +43,4 @@ scalar/return types, no `??`, no arrow functions. It also uses tab indentation, 
 `<?php namespace Foo;` on one line, and the `OR` keyword. Match that style; do not modernise it
 incidentally.
 
-Line endings are LF, enforced by `.gitattributes` (`* text=auto eol=lf`) — the tree was previously
-checked out through a CRLF smudge filter, which made every tracked file read as modified.
-
 Update `CHANGELOG.md` (newest first, `x.y.z (YYYY-MM-DD)` heading) for any released change.
