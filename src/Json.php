@@ -48,7 +48,7 @@ class Json
 
 		$json_error = json_last_error();
 
-		if (is_null($decoded_data) OR $json_error != JSON_ERROR_NONE)
+		if ($json_error != JSON_ERROR_NONE)
 		{
 			throw new JsonException("Error decoding JSON:", $json_error);
 		}

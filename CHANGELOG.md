@@ -16,8 +16,17 @@ Unreleased
   to be chained, which the old hint prevented. It matches the parent `\Exception` signature. A
   subclass that overrides the constructor with an `\Exception` hint will need updating.
 
-The behaviour of `Json::encode` and `Json::decode` is unchanged; everything else below is
-packaging, tests or documentation.
+**Fixed**
+
+* `Json::decode('null')` returned an exception instead of `null`. `null` is valid JSON, but a
+  legitimate `null` result was indistinguishable from a failure, so decoding it threw a
+  `JsonException` whose message read "Error decoding JSON: No error has occurred". `decode()`
+  now relies solely on `json_last_error()`, which is reset by every `json_*` call and is the
+  authoritative signal. `false`, `0` and `''` were unaffected and remain so. This is a
+  behaviour change for anyone who depended on the exception.
+
+Apart from that fix, `Json::encode` and `Json::decode` behave as before; everything else below
+is packaging, tests or documentation.
 
 **Packaging**
 

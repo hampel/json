@@ -27,11 +27,13 @@ warning fails.
 
 ## Architecture
 
-- `src/Json.php` — `Json::encode()` / `Json::decode()`. Both suppress the native call with `@`, then
-  inspect `json_last_error()`; a falsy/null return **or** a non-`JSON_ERROR_NONE` code throws.
-  Consequence to keep in mind: `Json::decode('null')` throws, because a legitimate `null` result is
-  indistinguishable from failure under this check. `DECODE_ASSOC`/`DECODE_OBJECT` constants exist
-  only to make the `$assoc` argument readable at call sites.
+- `src/Json.php` — `Json::encode()` / `Json::decode()`. Both suppress the native call with `@` and
+  then inspect `json_last_error()`, which is the authoritative failure signal because it is reset
+  by every `json_*` call. `decode()` relies on it alone; do not reintroduce a check on the decoded
+  value, since `null`, `false`, `0` and `''` are all legitimate results (an `is_null()` check here
+  made `Json::decode('null')` throw an exception reading "No error has occurred", fixed in 3.0.0).
+  `DECODE_ASSOC`/`DECODE_OBJECT` constants exist only to make the `$assoc` argument readable at
+  call sites.
 - `src/JsonException.php` — constructor takes a *prefix* (`"Error decoding JSON:"`) and the
   `json_last_error()` code, then appends the matching text from the static `$messages` map (or
   `"Unknown Error"`). Tests assert against the full concatenated message, so editing a string in

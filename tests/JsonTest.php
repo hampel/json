@@ -49,6 +49,20 @@ class JsonTest extends TestCase
 		$this->assertEquals(json_decode($data, true), Json::decode($data, Json::DECODE_ASSOC));
 	}
 
+	public function testDecodeNullLiteral(): void
+	{
+		// null is valid JSON and must decode to null, not throw - a legitimate
+		// null result was previously indistinguishable from a failure
+		$this->assertNull(Json::decode('null'));
+	}
+
+	public function testDecodeFalsyValues(): void
+	{
+		$this->assertFalse(Json::decode('false'));
+		$this->assertSame(0, Json::decode('0'));
+		$this->assertSame('', Json::decode('""'));
+	}
+
 	public function testDecodeBrokenSyntaxError(): void
 	{
 		$this->expectException(JsonException::class);
