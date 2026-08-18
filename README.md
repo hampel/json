@@ -56,9 +56,15 @@ $data = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
 // Encode a variable as JSON:
 echo Json::encode($data);
 
-// Encode options
+// Encode options - escape characters that are unsafe in HTML
+$html = ['note' => '<a href="x">Tom & Jerry\'s</a>'];
 $options = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP;
-echo Json::encode($data, $options);
+
+echo Json::encode($html);
+// {"note":"<a href=\"x\">Tom & Jerry's<\/a>"}
+
+echo Json::encode($html, $options);
+// {"note":"\u003Ca href=\u0022x\u0022\u003ETom \u0026 Jerry\u0027s\u003C\/a\u003E"}
 
 // Decode JSON:
 print_r(Json::decode('{"a":1,"b":2,"c":3,"d":4,"e":5}'));
