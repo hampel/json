@@ -82,6 +82,15 @@ class JsonTest extends TestCase
         Json::encode(NAN);
     }
 
+    public function testEncodeMalformedUtf8(): void
+    {
+        $this->expectException(JsonException::class);
+        $this->expectExceptionMessage('Error encoding JSON: Malformed UTF-8 characters, possibly incorrectly encoded');
+
+        // a continuation byte with no lead byte before it is not valid UTF-8
+        Json::encode("\xB1\x31");
+    }
+
     public function testDecodeControlCharacter(): void
     {
         $this->expectException(JsonException::class);
@@ -89,6 +98,16 @@ class JsonTest extends TestCase
 
         // a raw control character is not legal inside a JSON string
         Json::decode("\"a\x01b\"");
+    }
+
+    public function testDecodeStateMismatch(): void
+    {
+        $this->expectException(JsonException::class);
+        $this->expectExceptionMessage('Error decoding JSON: Invalid or malformed JSON');
+
+        // brackets that do not match each other; a merely truncated document
+        // reports JSON_ERROR_SYNTAX instead, which is a different code and message
+        Json::decode('{]');
     }
 
     public function testEncodeRecursion(): void
