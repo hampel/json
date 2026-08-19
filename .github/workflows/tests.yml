@@ -38,6 +38,34 @@ jobs:
 
       - run: vendor/bin/phpunit
 
+  lowest:
+    name: Lowest dependencies
+    runs-on: ubuntu-latest
+
+    # Every other job installs the newest of everything, so a dev-tool
+    # constraint that claims more than it can deliver never gets tested. This
+    # one resolves the floor and runs against it. It is not hypothetical: with
+    # "phpstan/phpstan": "^2.0" this job would have failed, because phpstan.neon
+    # sets phpVersion.max to 80500 and no PHPStan before 2.1.22 accepts it.
+    #
+    # Pint is deliberately not run here. It is a formatter whose rule set moves
+    # between patches, so the oldest Pint could reject code the newest accepts,
+    # which is churn rather than a defect.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.3'
+          extensions: json
+          coverage: none
+
+      - run: composer update --prefer-lowest --prefer-stable --prefer-dist --no-progress
+
+      - run: vendor/bin/phpunit
+
+      - run: vendor/bin/phpstan analyse --no-progress
+
   analyse:
     name: Static analysis
     runs-on: ubuntu-latest
