@@ -22,6 +22,19 @@ vendor/bin/phpunit tests/JsonTest.php                    # single file
 php8.5 vendor/bin/phpunit                                # ceiling of the supported range
 ```
 
+```bash
+vendor/bin/rig                  # the exercises this package offers
+vendor/bin/rig errors           # run one
+vendor/bin/rig errors --php=php8.5
+```
+
+`harness/` holds `hampel/rig` exercises — plain PHP scripts that drive the package and print
+what happened, for a person to read. They are not tests: nothing asserts, and a thrown
+exception is an outcome to look at rather than a failure. `encode` and `decode` show the
+values each returns; `errors` triggers all eight throwable `json_last_error()` codes and
+prints the message text for each, which is the part a test can only assert has not changed.
+The directory is `export-ignore`d and PHPStan does not analyse it, but Pint does.
+
 `composer check` runs Pint, PHPStan and the suite — the same three things CI runs, so a green
 check locally means a green build.
 
