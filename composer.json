@@ -22,7 +22,7 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "hampel/rig": "^0.1.0",
+        "hampel/rig": "^0.1.2",
         "laravel/pint": "^1.30",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^12.0"

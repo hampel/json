@@ -71,9 +71,7 @@ $io->line();
 
 $chained = new JsonException('Error decoding JSON:', JSON_ERROR_SYNTAX, new RuntimeException('the cause'));
 
-$io->value('class', $chained::class);
+$io->value('exception', $chained);
 $io->value('extends', get_parent_class($chained));
-$io->value('message', $chained->getMessage());
 $io->value('code', $chained->getCode());
-$io->value('previous', $chained->getPrevious()::class);
-$io->value('cause', $chained->getPrevious()?->getMessage());
+$io->value('previous', $chained->getPrevious());
