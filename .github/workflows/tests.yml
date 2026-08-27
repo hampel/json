@@ -88,3 +88,42 @@ jobs:
       # Runs once rather than per version: phpstan.neon analyses the whole
       # 8.3 - 8.5 range in a single pass, whatever PHP it runs on.
       - run: vendor/bin/phpstan analyse --no-progress
+
+  dependencies:
+    name: Declared dependencies
+    runs-on: ubuntu-latest
+
+    # Reads src/ against a --no-dev install and reports any symbol that no
+    # declared dependency provides. Do not read this as a dependency check on a
+    # package with no dependencies and delete it: "require" is php and ext-json,
+    # so the packages half of the check finds nothing by construction. The
+    # extension half is the reason it is here. An undeclared ext-* is invisible
+    # to everything else in this workflow - PHPStan knows ctype_alpha() and
+    # mb_strlen() from its own stubs and stays silent, and the suite passes
+    # because the runner has the extensions - so this is the only step that
+    # would name ext-ctype or ext-mbstring before a consumer without them did.
+    #
+    # It cannot vouch for ext-json itself. "json" is in the checker's default
+    # php-core-extensions list and is therefore assumed always present, so
+    # deleting that line from composer.json still reports clean - verified
+    # 2026-08-27, not inferred from the docs.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.3'
+          extensions: json
+          coverage: none
+
+      - run: composer install --no-dev --prefer-dist --no-progress
+
+      # Installed outside the package so that the checker's own dependencies
+      # cannot land in the tree being checked. "composer -d" does not create the
+      # directory: without the mkdir the step dies with "Invalid working
+      # directory specified".
+      - run: |
+          mkdir -p /tmp/crc
+          composer -d /tmp/crc require maglnet/composer-require-checker:^4.20 --no-progress
+
+      - run: /tmp/crc/vendor/bin/composer-require-checker check composer.json

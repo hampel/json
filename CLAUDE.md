@@ -35,8 +35,10 @@ values each returns; `errors` triggers all eight throwable `json_last_error()` c
 prints the message text for each, which is the part a test can only assert has not changed.
 The directory is `export-ignore`d and PHPStan does not analyse it, but Pint does.
 
-`composer check` runs Pint, PHPStan and the suite — the same three things CI runs, so a green
-check locally means a green build.
+`composer check` runs Pint, PHPStan and the suite. CI runs those three, plus a `--prefer-lowest`
+resolve and `composer-require-checker` against a `--no-dev` install. The checker is installed
+outside the package so that its own dependencies cannot be what satisfies a symbol it is meant to
+report — which is why it is neither in `require-dev` nor in `composer check`.
 
 PHPUnit 12 with `failOnRisky`, `failOnWarning`, `failOnDeprecation` and `failOnNotice` enabled, so
 a test that emits output, or code in `src` that triggers a deprecation, fails the run. Note that
