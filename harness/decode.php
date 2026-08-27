@@ -47,9 +47,11 @@ $io->line();
 $io->info('  which is why the decoded value cannot be the error signal');
 $io->line();
 
-$io->value('decode(null)', Json::decode('null'));
-$io->value('is_null', is_null(Json::decode('null')));
-$io->value('last error', json_last_error_msg());
+$io->values([
+    'decode(null)' => Json::decode('null'),
+    'is_null' => is_null(Json::decode('null')),
+    'json_last_error()' => json_last_error_msg(),
+]);
 
 $io->line();
 $io->info('  $depth, where decode() and encode() do not agree');

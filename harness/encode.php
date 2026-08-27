@@ -72,5 +72,7 @@ $io->line();
 $io->info('  native json_encode() signals the same failures by returning false');
 $io->line();
 
-$io->value('native', json_encode(NAN));
-$io->value('last error', json_last_error_msg());
+$io->values([
+    'json_encode()' => json_encode(NAN),
+    'json_last_error()' => json_last_error_msg(),
+]);
